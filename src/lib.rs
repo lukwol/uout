@@ -1,6 +1,6 @@
 #![no_std]
 
-pub mod serial;
+mod serial;
 
 pub trait OutputConvertible<T> where T: Output<Self>, Self:Sized {
     fn into_output(self) -> T;

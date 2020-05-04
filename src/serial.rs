@@ -28,8 +28,10 @@ where
 
     fn write_str(&mut self, s: &str) -> Result<(), Self::Error> {
         for byte in s.as_bytes() {
-            let send = if *byte == b'\n' { b'\r' } else { *byte };
-            block!(self.0.write(send))?;
+            if *byte == b'\n' {
+                block!(self.0.write(b'\r'))?;
+            }
+            block!(self.0.write(*byte))?;
         }
         Ok(())
     }
