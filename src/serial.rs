@@ -1,26 +1,20 @@
-use crate::{Output, OutputConvertible};
+use crate::Output;
 use embedded_hal::serial;
 use nb::block;
 use ufmt::uWrite;
 
-pub struct SerialOutput<T>(T);
+pub struct SerialOutput<'a, T>(&'a mut T);
 
-impl<T> Output<T> for SerialOutput<T> {
-    fn free(self) -> T {
-        self.0
-    }
-}
-
-impl<T> OutputConvertible<SerialOutput<T>> for T
+impl<'a, T> Output<'a, SerialOutput<'a, T>> for T
 where
     T: serial::Write<u8>,
 {
-    fn into_output(self) -> SerialOutput<T> {
+    fn output(&'a mut self) -> SerialOutput<'a, T> {
         SerialOutput(self)
     }
 }
 
-impl<T> uWrite for SerialOutput<T>
+impl<'a, T> uWrite for SerialOutput<'a, T>
 where
     T: serial::Write<u8>,
 {

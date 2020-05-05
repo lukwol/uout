@@ -5,17 +5,16 @@ mod serial {
     use super::mock::MockSerial;
     use embedded_hal::serial::Write;
     use ufmt::{derive::uDebug, uwrite, uwriteln};
-    use uout::{Output, OutputConvertible};
+    use uout::Output;
 
     #[test]
     fn writing_to_output() {
         let mut mock_serial = MockSerial::new();
-        let mut out = mock_serial.into_output();
+        let mut out = mock_serial.output();
 
         uwrite!(out, "The quick {} fox ", "brown").unwrap();
         uwriteln!(out, "jumps over the {} dog", "lazy").unwrap();
 
-        mock_serial = out.free();
         assert_eq!(
             mock_serial.captured_output.as_str(),
             "The quick brown fox jumps over the lazy dog\r\n"
@@ -31,21 +30,19 @@ mod serial {
         }
 
         let mut mock_serial = MockSerial::new();
-        let mut out = mock_serial.into_output();
+        let mut out = mock_serial.output();
         let pair = Pair { x: 1, y: 2 };
         uwriteln!(out, "{:?}", pair).unwrap();
 
-        mock_serial = out.free();
         assert_eq!(
             mock_serial.captured_output.as_str(),
             "Pair { x: 1, y: 2 }\r\n"
         );
 
         mock_serial.flush().unwrap();
-        out = mock_serial.into_output();
+        out = mock_serial.output();
         uwriteln!(out, "{:#?}", pair).unwrap();
 
-        mock_serial = out.free();
         assert_eq!(
             mock_serial.captured_output.as_str(),
             "Pair {\r\n    x: 1,\r\n    y: 2,\r\n}\r\n"
