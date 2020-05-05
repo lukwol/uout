@@ -3,6 +3,7 @@ use embedded_hal::serial;
 use nb::block;
 use ufmt::uWrite;
 
+/// Writable Serial output
 pub struct SerialOutput<'a, T>(&'a mut T);
 
 impl<'a, T> Output<'a, SerialOutput<'a, T>> for T
