@@ -1,5 +1,5 @@
 # `μout`
-Platform agnostic, effortless generation of writable outputs using [`μfmt`](https://github.com/japaric/ufmt) crate.
+Platform agnostic, effortless writable outputs generation using [`μfmt`](https://github.com/japaric/ufmt) crate.
 
 ## License
 
